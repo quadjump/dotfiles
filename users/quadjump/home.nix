@@ -39,6 +39,7 @@
     vscode
     opensnitch-ui
     mullvad-vpn
+    zeal
 
     # CLI Programs
     bat
@@ -47,6 +48,7 @@
     tree
 
     # Nix-specific Tools
+    nix-direnv
     nix-tree
 
     # Other
@@ -150,23 +152,33 @@
 
   programs.vscode = {
     enable = true;
-    extensions = [
-      # Nix
-      pkgs.vscode-extensions.bbenoist.nix
-      pkgs.vscode-extensions.jnoortheen.nix-ide
-      pkgs.vscode-extensions.arrterian.nix-env-selector
-      # Haskell
-      pkgs.vscode-extensions.haskell.haskell
-      # Python
-      pkgs.vscode-extensions.ms-python.python
-      pkgs.vscode-extensions.ms-python.vscode-pylance
-      # Documentation
-      pkgs.vscode-extensions.yzhang.markdown-all-in-one
-      # Theme
-      # Tooling
-      pkgs.vscode-extensions.eamodio.gitlens
-      # General
-    ];
-    #package = vscode-1.68.1 # default
+    extensions = with pkgs.vscode-extensions; [
+        # Nix
+        bbenoist.nix
+        jnoortheen.nix-ide
+        arrterian.nix-env-selector
+        # Haskell
+        haskell.haskell
+        # Python
+        ms-python.python
+        ms-python.vscode-pylance
+        # Documentation
+        yzhang.markdown-all-in-one
+        # Configuration
+        tamasfe.even-better-toml
+        # Theme
+        # Tooling
+        eamodio.gitlens
+        # General
+      ] 
+      
+      ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {  # Run python doctests inline like HLS
+          name = "python-inline-repl";
+          publisher = "zijie";
+          version = "0.0.1";
+          sha256 = "sha256-rn/ZR5OgDaxAGB+Q0FJ3Vx1VIAVosoZq1A5z+hptiI0=";
+        }
+      ];
   };
 }

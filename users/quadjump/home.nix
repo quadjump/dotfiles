@@ -28,12 +28,13 @@
       };
     };
   };
-  nixpkgs.config.pkgs.firefox.enableGnomeExtensions = true;  # https://unix.stackexchange.com/a/437249 - "How can I install GNOME shell extensions from extensions.gnome.org through Firefox on NixOS?"
+  nixpkgs.config.pkgs.firefox.enableGnomeExtensions = true; # https://unix.stackexchange.com/a/437249 - "How can I install GNOME shell extensions from extensions.gnome.org through Firefox on NixOS?"
 
   home.packages = with pkgs; [
     # Desktop Applications
     _1password-gui
     alacritty
+    dolphin-emu  # Gamecube/Wii/Triforce emulator
     emacs
     firefox
     vscode
@@ -50,6 +51,8 @@
     # Nix-specific Tools
     nix-direnv
     nix-tree
+    nixpkgs-fmt
+    rnix-lsp
 
     # Other
   ];
@@ -68,13 +71,13 @@
 
   programs.firefox = {
     enable = true;
-    extensions =  # Helpful blog: https://cmacr.ae/post/2020-05-09-managing-firefox-on-macos-with-nix/
+    extensions = # Helpful blog: https://cmacr.ae/post/2020-05-09-managing-firefox-on-macos-with-nix/
       with pkgs.nur.repos.rycee.firefox-addons; [
         # Find in https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
         # Good privacy resource - https://restoreprivacy.com/
         cookie-autodelete
-        decentraleyes  # Blocks shitty CDN trojan fuckery served alongside actual content
-        i-dont-care-about-cookies  # Removes cookie warning by removing element or auto-accepting
+        decentraleyes # Blocks shitty CDN trojan fuckery served alongside actual content
+        i-dont-care-about-cookies # Removes cookie warning by removing element or auto-accepting
         onepassword-password-manager
         reddit-enhancement-suite
         ublock-origin
@@ -88,7 +91,8 @@
         #enableTridactylNative = true;
       };
     };
-    profiles.default = {  # New firefox needs profile, else above configurations won't work
+    profiles.default = {
+      # New firefox needs profile, else above configurations won't work
       id = 0;
       name = "Default";
       isDefault = true;
@@ -102,15 +106,18 @@
           keyword = "Nixpkgs";
           url = "https://search.nixos.org/packages";
         };
-        home-manager = {  # Home Manager Manual
-          keyword = "hmm"; 
+        home-manager = {
+          # Home Manager Manual
+          keyword = "hmm";
           url = "https://nix-community.github.io/home-manager/";
         };
-        home-manager-opt = {  # Home Manager Configuration Options
-          keyword = "hmo"; 
+        home-manager-opt = {
+          # Home Manager Configuration Options
+          keyword = "hmo";
           url = "https://nix-community.github.io/home-manager/options.html";
         };
-        nur = {  # Nix User Repositories
+        nur = {
+          # Nix User Repositories
           keyword = "nur";
           url = "https://nur.nix-community.org/";
         };
@@ -128,7 +135,7 @@
     delta.enable = true;
     # diff-so-fancy.enable = true;
     # difftastic.enable = true;
-    ignores = [];
+    ignores = [ ];
     userEmail = "krypton-00fallout@icloud.com";
     userName = "quadjump";
   };
@@ -147,38 +154,66 @@
 
   programs.pylint.enable = true;
   programs.pylint = {
-    settings = {};
+    settings = { };
   };
 
   programs.vscode = {
     enable = true;
     extensions = with pkgs.vscode-extensions; [
-        # Nix
-        bbenoist.nix
-        jnoortheen.nix-ide
-        arrterian.nix-env-selector
-        # Haskell
-        haskell.haskell
-        # Python
-        ms-python.python
-        ms-python.vscode-pylance
-        # Documentation
-        yzhang.markdown-all-in-one
-        # Configuration
-        tamasfe.even-better-toml
-        # Theme
-        # Tooling
-        eamodio.gitlens
-        # General
-      ] 
-      
-      ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {  # Run python doctests inline like HLS
-          name = "python-inline-repl";
-          publisher = "zijie";
-          version = "0.0.1";
-          sha256 = "sha256-rn/ZR5OgDaxAGB+Q0FJ3Vx1VIAVosoZq1A5z+hptiI0=";
-        }
-      ];
+      # Nix
+      bbenoist.nix
+      jnoortheen.nix-ide
+      arrterian.nix-env-selector
+      # Haskell
+      haskell.haskell
+      # Python
+      ms-python.python
+      ms-python.vscode-pylance
+      # Documentation
+      yzhang.markdown-all-in-one
+      # Configuration
+      tamasfe.even-better-toml
+      # Theme
+      # Tooling
+      eamodio.gitlens
+      # General
+    ]
+
+    ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+      {
+        # Run python doctests inline like HLS
+        name = "mypy";
+        publisher = "matangover";
+        version = "0.2.2";
+        sha256 = "sha256-eaiR30HjPCpOLUKQqiQ2Oqj+XY+JNnV47bM5KD2Mouk=";
+      }
+      {
+        # Run python doctests inline like HLS
+        name = "python-inline-repl";
+        publisher = "zijie";
+        version = "0.0.1";
+        sha256 = "sha256-rn/ZR5OgDaxAGB+Q0FJ3Vx1VIAVosoZq1A5z+hptiI0=";
+      }
+      {
+        # Access documentation with Zeal (linux kapeli/Dash.app alternetive)
+        name = "vscode-dash"; # configure in vscode's settings.json through nix
+        publisher = "deerawan";
+        version = "2.4.0";
+        sha256 = "sha256-Yqn59ppNWQRMWGYVLLWofogds+4t/WRRtSSfomPWQy4=";
+      }
+    ];
+    userSettings = {
+      # General
+      "update.channel" = "none";
+      "window.zoomLevel" = 1;
+
+      # Nix
+      "[nix]"."editor.tabSize" = 2;
+      "nix.enableLanguageServer" = true;
+      "nixEnvSelector.packages" = [ ];
+
+      # Python
+      "python.linting.mypyEnabled" = true;
+    };
   };
 }

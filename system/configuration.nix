@@ -95,6 +95,8 @@
   #  firefox
     chrome-gnome-shell
     gnome.gnome-shell-extensions
+
+    linuxKernel.packages.linux_5_18.gcadapter-oc-kmod  # Enable gamecube controller for use with Dolphin emulator
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -109,6 +111,12 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  # Enable gamecube controller for use with Dolphin emulator
+  # etc/udev/rules.d/51-gcadapter.rule - https://wiki.dolphin-emu.org/index.php?title=How_to_use_the_Official_GameCube_Controller_Adapter_for_Wii_U_in_Dolphin#Linux
+  # services.udev.packages = [
+
+  # ]
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

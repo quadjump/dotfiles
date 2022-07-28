@@ -30,17 +30,42 @@
   };
   nixpkgs.config.pkgs.firefox.enableGnomeExtensions = true; # https://unix.stackexchange.com/a/437249 - "How can I install GNOME shell extensions from extensions.gnome.org through Firefox on NixOS?"
 
+  # ssbm = {
+  #   options.ssbm = {
+  #     # overlay.enable = mkEnableOption "Activate the package overlay.";
+  #     cache.enable = true; # "Turn on cache."
+  #     gcc.oc-kmod.enable = true;  # "Turn on overclocking kernel module."
+  #     gcc.rules.enable = true;  # "Turn on rules for your gamecube controller adapter."
+  #     # gcc.rules.rules = mkOption {
+  #     #   default = readFile ./gcc.rules;
+  #     #   type = types.lines;
+  #     #   description = "To be appended to services.udev.extraRules if gcc.rules.enable is set.";
+  #     # };
+  #     # keyb0xx = {
+  #     #   enable = mkEnableOption "Add keyb0xx to your binary path";
+  #     #   config = mkOption {
+  #     #     default = readFile ./keyb0xx/config.h;
+  #     #     type = types.lines;
+  #     #     description = "Config.h file to compile keyb0xx with.";
+  #     #   };
+  #     # };
+  #   };
+  # };
+
   home.packages = with pkgs; [
     # Desktop Applications
     _1password-gui
     alacritty
-    dolphin-emu  # Gamecube/Wii/Triforce emulator
     emacs
     firefox
     vscode
     opensnitch-ui
     mullvad-vpn
     zeal
+
+    # Gaming
+    dolphin-emu  # Gamecube/Wii/Triforce emulator
+    # ssbm.nixosModule  # Slippi Melee - https://github.com/djanatyn/ssbm-nix/blob/524c757ec88e8cc149809fb452b3c007d1134c22/flake.nix#L56
 
     # CLI Programs
     bat
@@ -49,6 +74,7 @@
     tree
 
     # Nix-specific Tools
+    haskellPackages.nix-derivation
     nix-direnv
     nix-tree
     nixpkgs-fmt

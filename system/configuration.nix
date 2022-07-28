@@ -4,11 +4,39 @@
 
 { config, pkgs, ... }:
 
+let ssbm = import ../../git/forks/ssbm-nix;
+# let 
+#   ssbm = import (builtins.fetchGit {
+#       url = "git@github.com:djanatyn/ssbm-nix.git";
+#       rev = "524c757ec88e8cc149809fb452b3c007d1134c22";
+#       # sha256 = "3b2de54224963ee17857a9737b65d49edc423e06ad7e9c9b85d9f69ca923676a";
+#     }
+#   );
+in
 {
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+
   imports =
     [ # Include the results of the hardware scan.
       <nixos-hardware/framework>
       ./hardware-configuration.nix
+      ../modules/ssbm
+      ssbm.nixosModule
+      # /home/quadjump/dotfiles
+      # /home/quadjump/git/forks/ssbm-nix
+      # ../../git/forks/ssbm-nix
+      # (pkgs.callPackage (builtins.fetchGit {
+      #     url = "git@github.com:djanatyn/ssbm-nix.git";
+      #     rev = "524c757ec88e8cc149809fb452b3c007d1134c22";
+      #     # sha256 = "3b2de54224963ee17857a9737b65d49edc423e06ad7e9c9b85d9f69ca923676a";
+      #     }
+      #   )
+      # )
     ];
 
   # Bootloader.
@@ -96,7 +124,7 @@
     chrome-gnome-shell
     gnome.gnome-shell-extensions
 
-    linuxKernel.packages.linux_5_18.gcadapter-oc-kmod  # Enable gamecube controller for use with Dolphin emulator
+    # linuxKernel.packages.linux_5_18.gcadapter-oc-kmod  # Enable gamecube controller for use with Dolphin emulator
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -115,8 +143,11 @@
   # Enable gamecube controller for use with Dolphin emulator
   # etc/udev/rules.d/51-gcadapter.rule - https://wiki.dolphin-emu.org/index.php?title=How_to_use_the_Official_GameCube_Controller_Adapter_for_Wii_U_in_Dolphin#Linux
   # services.udev.packages = [
-
+  #   linuxKernel.packages.linux_5_18.gcadapter-oc-kmod  # Enable gamecube controller for use with Dolphin emulator
   # ]
+  services.udev.extraRules = ''
+    SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="0337", MODE="0666"
+  '';
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

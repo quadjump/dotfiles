@@ -73,7 +73,7 @@ in
   services.xserver.desktopManager.gnome.enable = true;
 
   # Enable GNOME Extensions
-  services.gnome.chrome-gnome-shell.enable = true;  # https://nix-community.github.io/home-manager/options.html#opt-programs.firefox.enableGnomeExtensions
+  services.gnome.gnome-browser-connector.enable = true;  # https://nix-community.github.io/home-manager/options.html#opt-programs.firefox.enableGnomeExtensions
   nixpkgs.config.firefox.enableGnomeExtensions = true;  # https://unix.stackexchange.com/a/437249 - "How can I install GNOME shell extensions from extensions.gnome.org through Firefox on NixOS?"
 
   # Configure keymap in X11

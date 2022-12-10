@@ -127,27 +127,47 @@
       #   "browser.startup.homepage" = "https://search.nixos.org/packages"
       #   "browser.urlbar.placeholderName" = "DuckDuckGo";
       # };
-      bookmarks = {
-        nixpkgs = {
-          keyword = "Nixpkgs";
-          url = "https://search.nixos.org/packages";
-        };
-        home-manager = {
-          # Home Manager Manual
-          keyword = "hmm";
-          url = "https://nix-community.github.io/home-manager/";
-        };
-        home-manager-opt = {
-          # Home Manager Configuration Options
-          keyword = "hmo";
-          url = "https://nix-community.github.io/home-manager/options.html";
-        };
-        nur = {
-          # Nix User Repositories
-          keyword = "nur";
-          url = "https://nur.nix-community.org/";
-        };
-      };
+      bookmarks = [
+        {
+          name = "Tech";
+          toolbar = true;
+          bookmarks = [
+            {
+              name = "HN";
+              url = "https://hn.premii.com/";
+            }
+            {
+              name = "HN Algolia";
+              url = "https://hn.algolia.com/?dateRange=all&page=0&prefix=true&query=&sort=byPopularity&type=all";
+            }
+          ];
+        }
+        {
+          name = "Nix";
+          toolbar = true;
+          bookmarks = [
+            {
+              name = "Nixpkgs";
+              url = "https://search.nixos.org/packages";
+            }
+            {
+              # Home Manager Manual
+              name = "Home-Manager Manual";
+              url = "https://nix-community.github.io/home-manager/";
+            }
+            {
+              # Home Manager Configuration Options
+              name = "Home-Manager Options";
+              url = "https://nix-community.github.io/home-manager/options.html";
+            }
+            {
+              # Nix User Repositories
+              name = "Nur - Nix User Repositories";
+              url = "https://nur.nix-community.org/";
+            }
+          ];
+        }
+      ];
     };
   };
 
@@ -207,7 +227,7 @@
 
     ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       {
-        # Run python doctests inline like HLS
+        # Mypy
         name = "mypy";
         publisher = "matangover";
         version = "0.2.2";
@@ -230,6 +250,7 @@
     ];
     userSettings = {
       # General
+      "files.autoSave" = "on";
       "update.channel" = "none";
       "window.zoomLevel" = 1;
 
